@@ -1,6 +1,33 @@
 import cv2
 import keyboard
 import numpy as np
+from sightengine.client import SightengineClient
+import requests
+import json
+client = SightengineClient('1447473650', '22wuLHJBwFwx5jVaGDV3')
+output = client.check('nudity-2.0', 'wad', 'gore', 'offensive').video('https://sightengine.com/assets/stream/examples/funfair.mp4', 'https://your.callback.url/path')
+
+params = {
+  # specify the models you want to apply
+  'models': 'nudity',
+  # specify where you want to receive result callbacks
+  'callback_url': 'https://yourcallback/path',
+  'api_user': 1447473650,
+  'api_secret': '22wuLHJBwFwx5jVaGDV3'
+}
+files = {'media': open('D:/check.mp4', 'rb')}
+r = requests.post('https://api.sightengine.com/1.0/video/check.json', files=files, data=params)
+print(r)
+if r.status_code == 200:
+  print('success')
+else:
+  print('error')
+output = json.loads(r.text)
+
+print(output)
+
+
+
 cap = cv2.VideoCapture('New Project 2 [49398A1].mp4')
 # cap = cv2.VideoCapture('D:/video.mp4')
 ret, frame = cap.read()
